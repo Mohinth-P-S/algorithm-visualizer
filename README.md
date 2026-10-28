@@ -60,7 +60,7 @@ From the `algorithm-visualizer/` folder, run:
 python server.py
 ```
 
-The server binds to `127.0.0.1:8000` by default. You can also specify a custom port as a command-line argument or via the `PORT` environment variable:
+The server binds to `127.0.0.1:8001` by default. You can also specify a custom port as a command-line argument or via the `PORT` environment variable:
 
 ```bash
 python server.py 8080
@@ -75,7 +75,7 @@ On first launch, SQLite database `runs.db` is automatically created if it does n
 Open your web browser and navigate to:
 
 ```
-http://localhost:8000
+http://localhost:8001
 ```
 
 ---
