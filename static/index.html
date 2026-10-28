@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Algorithm Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <header class="app-header">
+      <h1>Algorithm Visualizer</h1>
+      <p class="subtitle">Interactive sorting and searching visualization with real-time analytics</p>
+    </header>
+
+    <main class="main-content">
+      <!-- Control Panel -->
+      <section class="card controls-card" aria-label="Visualizer Controls">
+        <div class="controls-grid">
+          <!-- Algorithm Selection -->
+          <div class="control-group">
+            <label for="algo-select">Algorithm</label>
+            <select id="algo-select" aria-label="Algorithm selection">
+              <optgroup label="Sorting">
+                <option value="bubble" selected>Bubble Sort</option>
+                <option value="selection">Selection Sort</option>
+                <option value="insertion">Insertion Sort</option>
+                <option value="merge">Merge Sort</option>
+                <option value="quick">Quick Sort</option>
+              </optgroup>
+              <optgroup label="Searching">
+                <option value="linear">Linear Search</option>
+                <option value="binary">Binary Search</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <!-- Array Size Slider -->
+          <div class="control-group">
+            <div class="label-row">
+              <label for="size-slider">Array Size</label>
+              <span id="size-val" class="badge">30</span>
+            </div>
+            <input type="range" id="size-slider" min="5" max="100" value="30" aria-label="Array size slider">
+          </div>
+
+          <!-- Speed Slider -->
+          <div class="control-group">
+            <div class="label-row">
+              <label for="speed-slider">Speed</label>
+              <span id="speed-val" class="badge">Normal</span>
+            </div>
+            <input type="range" id="speed-slider" min="1" max="100" value="65" aria-label="Animation speed slider">
+          </div>
+
+          <!-- Search Target (shown only for search algorithms) -->
+          <div class="control-group search-group" id="search-target-group" style="display: none;">
+            <label for="search-target">Value to find</label>
+            <input type="number" id="search-target" min="1" max="100" placeholder="1-100" aria-label="Value to find in array">
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="button-row">
+          <button type="button" id="btn-new" class="btn btn-secondary" aria-label="Generate new array">New array</button>
+          <button type="button" id="btn-start" class="btn btn-primary" aria-label="Start algorithm visualization">Start</button>
+          <button type="button" id="btn-stop" class="btn btn-danger" aria-label="Stop algorithm execution" disabled>Stop</button>
+        </div>
+      </section>
+
+      <!-- Status and Live Counters -->
+      <section class="status-section" aria-label="Execution Status and Metrics">
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-label">Comparisons</span>
+            <span class="metric-value" id="comp-count">0</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Writes / Swaps</span>
+            <span class="metric-value" id="write-count">0</span>
+          </div>
+        </div>
+        <div class="status-box" id="status-message" role="status" aria-live="polite">Ready</div>
+      </section>
+
+      <!-- Visualizer Area with Legend and Graph-Paper Background -->
+      <section class="card visualizer-card" aria-label="Visualization Canvas">
+        <div class="legend" aria-label="Color Legend">
+          <div class="legend-item">
+            <span class="legend-swatch swatch-normal"></span>
+            <span>Normal</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch swatch-comparing"></span>
+            <span>Comparing</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch swatch-changed"></span>
+            <span>Changed</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch swatch-found"></span>
+            <span>Sorted / Found</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch swatch-dimmed"></span>
+            <span>Out of Range</span>
+          </div>
+        </div>
+
+        <div class="bars-wrapper graph-paper" id="bars-container" role="img" aria-label="Array visualization graph">
+          <!-- Array bars will be rendered here dynamically -->
+        </div>
+      </section>
+
+      <!-- History and Statistics Section -->
+      <section class="card history-card" aria-label="Run History and Aggregated Stats">
+        <div class="history-header">
+          <h2>Run Analytics &amp; History</h2>
+          <button type="button" id="btn-clear-history" class="btn btn-outline" aria-label="Clear all recorded run history">Clear history</button>
+        </div>
+
+        <div class="tables-grid">
+          <!-- Latest Runs Table -->
+          <div class="table-container">
+            <h3>Latest runs</h3>
+            <table class="data-table" aria-label="Latest runs table">
+              <thead>
+                <tr>
+                  <th scope="col">Algorithm</th>
+                  <th scope="col">Size</th>
+                  <th scope="col">Comparisons</th>
+                  <th scope="col">Writes</th>
+                  <th scope="col">Local Time</th>
+                </tr>
+              </thead>
+              <tbody id="runs-table-body">
+                <tr>
+                  <td colspan="5" class="empty-state">No runs recorded yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Averages by Algorithm Table -->
+          <div class="table-container">
+            <h3>Averages by algorithm</h3>
+            <table class="data-table" aria-label="Averages by algorithm table">
+              <thead>
+                <tr>
+                  <th scope="col">Algorithm</th>
+                  <th scope="col">Runs</th>
+                  <th scope="col">Avg Size</th>
+                  <th scope="col">Avg Comparisons</th>
+                  <th scope="col">Avg Writes</th>
+                </tr>
+              </thead>
+              <tbody id="stats-table-body">
+                <tr>
+                  <td colspan="5" class="empty-state">No stats available yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>Algorithm Visualizer &bull; Pure Python &amp; Vanilla JS &bull; No external dependencies</p>
+    </footer>
+  </div>
+
+  <script src="algorithms.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
